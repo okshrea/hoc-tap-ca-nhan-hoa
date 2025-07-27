@@ -114,5 +114,115 @@
       }
     }
   </script>
+  <header>
+    <!-- Thêm vào phần <head> -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <h1>📚 Học tập Cá nhân hóa</h1>
+    <p>Chào em! Hãy nhập điểm để nhận nội dung phù hợp với mình nhé.</p>
+  </header>
+
+  <div class="container">
+    <div class="box">
+      <label for="toan">Điểm Toán:</label>
+      <input type="number" id="toan" min="0" max="10" step="0.1">
+
+      <label for="tv">Điểm Tiếng Việt:</label>
+      <input type="number" id="tv" min="0" max="10" step="0.1">
+
+      <label for="ta">Điểm Tiếng Anh:</label>
+      <input type="number" id="ta" min="0" max="10" step="0.1">
+
+      <button onclick="goiY()">📩 Xem gợi ý</button>
+      <button onclick="xemLai()">🔁 Xem lại kết quả lần trước</button>
+
+      <div id="result" class="suggestions"></div>
+    </div>
+  </div>
+
+  <script>
+    function goiY() {
+      let toan = parseFloat(document.getElementById('toan').value);
+      let tv = parseFloat(document.getElementById('tv').value);
+      let ta = parseFloat(document.getElementById('ta').value);
+      let result = document.getElementById('result');
+      result.innerHTML = "";
+
+      if (isNaN(toan) || isNaN(tv) || isNaN(ta)) {
+        result.innerHTML = "<p style='color: red'>⚠️ Vui lòng nhập đầy đủ điểm.</p>";
+        return;
+      }
+
+      // Gợi ý
+      let goiYText = "";
+
+      if (toan < 7) {
+        goiYText += `<div class="card"><strong>Toán:</strong> Em cần luyện thêm về phép chia phân số.</div>`;
+      } else {
+        goiYText += `<div class="card"><strong>Toán:</strong> Làm tốt! Thử bài nâng cao về tỉ lệ phần trăm.</div>`;
+      }
+
+      if (tv < 7) {
+        goiYText += `<div class="card"><strong>Tiếng Việt:</strong> Hãy đọc thêm truyện và luyện tìm ý chính đoạn văn.</div>`;
+      } else {
+        goiYText += `<div class="card"><strong>Tiếng Việt:</strong> Tuyệt vời! Hãy thử bài đọc hiểu nâng cao.</div>`;
+      }
+
+      if (ta < 7) {
+        goiYText += `<div class="card"><strong>Tiếng Anh:</strong> Nghe lại bài Unit 3 và luyện phát âm.</div>`;
+      } else {
+        goiYText += `<div class="card"><strong>Tiếng Anh:</strong> Rất khá! Hãy luyện thêm bài nghe nâng cao.</div>`;
+      }
+
+      result.innerHTML = goiYText;
+
+      // Lưu vào localStorage
+      const duLieu = {
+        toan: toan,
+        tv: tv,
+        ta: ta,
+        goiy: goiYText,
+        thoigian: new Date().toLocaleString('vi-VN')
+      };
+      localStorage.setItem("goiYCuoi", JSON.stringify(duLieu));
+    }
+
+    function xemLai() {
+      let data = localStorage.getItem("goiYCuoi");
+      let result = document.getElementById('result');
+      result.innerHTML = "";
+
+      if (!data) {
+        result.innerHTML = "<p>❌ Chưa có dữ liệu lưu trước đó.</p>";
+        return;
+      }
+
+      let obj = JSON.parse(data);
+      result.innerHTML = `<p>📅 Kết quả lần trước (lúc: <strong>${obj.thoigian}</strong>):</p>` + obj.goiy;
+    }
+  </script>
+  <h2>Biểu đồ tiến bộ</h2>
+<canvas id="progressChart" width="400" height="200"></canvas>
+<script>
+  // Lấy dữ liệu từ localStorage (đã lưu trước đó)
+  const storedData = JSON.parse(localStorage.getItem("hocSinhData")) || [];
+
+  const labels = storedData.map((d, i) => `Lần ${i + 1}`);
+  const scores = storedData.map(d => d.diem);
+
+  const ctx = document.getElementById('progressChart').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Điểm số theo thời gian',
+        data: scores,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.3,
+        fill: false
+      }]
+    }
+  });
+</script>
 </body>
 </html>
