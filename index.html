@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gợi ý học tập cá nhân hóa</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #e0f7fa;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #00796b;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    .box {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .suggestions {
+      margin-top: 20px;
+    }
+    .card {
+      background: #f1f8e9;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Hệ thống gợi ý học tập cá nhân hóa</h1>
+    <p>Chào em! Nhập điểm để nhận nội dung học tập phù hợp nhé.</p>
+  </header>
+
+  <div class="container">
+    <div class="box">
+      <label for="toan">Điểm Toán:</label>
+      <input type="number" id="toan" min="0" max="10" step="0.1">
+
+      <label for="tv">Điểm Tiếng Việt:</label>
+      <input type="number" id="tv" min="0" max="10" step="0.1">
+
+      <label for="ta">Điểm Tiếng Anh:</label>
+      <input type="number" id="ta" min="0" max="10" step="0.1">
+
+      <button onclick="goiY()">Xem gợi ý</button>
+
+      <div id="result" class="suggestions"></div>
+    </div>
+  </div>
+
+  <script>
+    function goiY() {
+      let toan = parseFloat(document.getElementById('toan').value);
+      let tv = parseFloat(document.getElementById('tv').value);
+      let ta = parseFloat(document.getElementById('ta').value);
+      let result = document.getElementById('result');
+      result.innerHTML = "";
+
+      if (isNaN(toan) || isNaN(tv) || isNaN(ta)) {
+        result.innerHTML = "<p style='color: red'>Vui lòng nhập đầy đủ điểm.</p>";
+        return;
+      }
+
+      if (toan < 7) {
+        result.innerHTML += `<div class="card"><strong>Toán:</strong> Em cần luyện thêm về phép chia phân số. Xem video và làm 5 bài luyện nhé!</div>`;
+      } else {
+        result.innerHTML += `<div class="card"><strong>Toán:</strong> Em làm tốt rồi! Hãy thử một bài toán nâng cao về tỉ lệ phần trăm.</div>`;
+      }
+
+      if (tv < 7) {
+        result.innerHTML += `<div class="card"><strong>Tiếng Việt:</strong> Em nên đọc thêm truyện và luyện kỹ năng tìm ý chính đoạn văn.</div>`;
+      } else {
+        result.innerHTML += `<div class="card"><strong>Tiếng Việt:</strong> Em đọc hiểu rất tốt! Cùng thử bài luyện nâng cao nhé.</div>`;
+      }
+
+      if (ta < 7) {
+        result.innerHTML += `<div class="card"><strong>Tiếng Anh:</strong> Nghe lại bài Unit 3 và luyện phát âm các từ mới.</div>`;
+      } else {
+        result.innerHTML += `<div class="card"><strong>Tiếng Anh:</strong> Em tiến bộ tốt! Thử bài nghe tốc độ cao hơn nào.</div>`;
+      }
+    }
+  </script>
+</body>
+</html>
