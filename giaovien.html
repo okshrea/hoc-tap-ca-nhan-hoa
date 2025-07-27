@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Trang Giáo viên</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Trang Giáo viên</h1>
+  <h3>Danh sách điểm học sinh</h3>
+  <table id="tableHS">
+    <tr><th>Họ tên</th><th>Điểm</th><th>Gợi ý</th></tr>
+  </table>
+
+  <script>
+    const table = document.getElementById("tableHS");
+    const data = JSON.parse(localStorage.getItem("hocSinhData")) || [];
+
+    data.forEach(hs => {
+      const row = table.insertRow();
+      row.insertCell(0).textContent = hs.ten;
+      row.insertCell(1).textContent = hs.diem;
+      row.insertCell(2).textContent = hs.goiy;
+    });
+  </script>
+  <!-- CDN jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<button onclick="xuatPDF()">📄 Xuất báo cáo PDF</button>
+  <script>
+  async function xuatPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const data = JSON.parse(localStorage.getItem("hocSinhData")) || [];
+
+    doc.text("Báo cáo học sinh", 10, 10);
+    let y = 20;
+
+    data.forEach((hs, i) => {
+      doc.text(`${i + 1}. ${hs.ten} - Điểm: ${hs.diem} - Gợi ý: ${hs.goiy}`, 10, y);
+      y += 10;
+    });
+
+    doc.save("baocao_hocsinh.pdf");
+  }
+</script>
+
+</body>
+</html>
